@@ -30,6 +30,7 @@ function RenderComments({ comments }) {
 }
 
 function RenderDish({ dish }) {
+  if (dish == null) return <div></div>;
   if (dish != null) {
     return (
       <div className="col-12 col-md-5 m-1">
@@ -50,6 +51,7 @@ function RenderDish({ dish }) {
 
 const DishDetail = (props) => {
   const dish = props.dish;
+  
   if (dish == null) return <div></div>;
 
   return (
