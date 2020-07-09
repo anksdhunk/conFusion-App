@@ -3,53 +3,25 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Button,
-  Form,
-  FormGroup,
   Label,
-  Input,
-  Col
+  Col,
+  Row,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, LocalForm, Errors } from "react-redux-form";
 
 class Contact extends Component {
-
   constructor(props) {
-    super(props)
-  
-    this.state = {
-
-      firstname : '',
-      lastname : '',
-      telnum : '',
-      email : '',
-      agree : false,
-      contactType: 'Tel.',
-      message : ''
-
-    }
+    super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleInputChange(event) {
-
-    const target = event.target;
-    const val = target.type === 'checkbox' ? target.checked:target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]:val
-    });
-
+  handleSubmit(values) {
+    console.log("Current state is: " + JSON.stringify(values));
+    alert("Current state is: " + JSON.stringify(values));
   }
 
-  handleSubmit(event) {
-    console.log("Current state is: " + JSON.stringify(this.state));
-    alert("Current state is: " + JSON.stringify(this.state));
-    event.preventDefault();
-  }
-  
   render() {
     return (
       <div className="container">
@@ -112,68 +84,122 @@ class Contact extends Component {
           </div>
         </div>
 
-        <div className = "row row-content">
-          <div className = "col-12">
+        <div className="row row-content">
+          <div className="col-12">
             <h3>Send us your feedback</h3>
           </div>
-          <div className = "col-12 col-md-9">
-            <Form onSubmit = {this.handleSubmit}>
-              <FormGroup row>
-                <Label htmlFor = "firstname" md ={2}>First Name</Label>
-                <Col md ={10}>
-                  <Input type = "text" id ="firstname" name = "firstname" placeholder = "First Name" value = {this.state.firstname} onChange = {this.handleInputChange}/>
+          <div className="col-12 col-md-9">
+            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+              <Row className="form-group">
+                <Label htmlFor="firstname" md={2}>
+                  First Name
+                </Label>
+                <Col md={10}>
+                  <Control.text
+                    model=".firstname"
+                    className="form-control"
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    placeholder="First Name"
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor = "lastname" md ={2}>Last Name</Label>
-                <Col md ={10}>
-                  <Input type = "text" id ="lastname" name = "lastname" placeholder = "Last Name" value = {this.state.lastname} onChange = {this.handleInputChange}/>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="lastname" md={2}>
+                  Last Name
+                </Label>
+                <Col md={10}>
+                  <Control.text
+                    model=".lastname"
+                    className="form-control"
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    placeholder="Last Name"
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor = "telnum" md ={2}>Contact Tel.</Label>
-                <Col md ={10}>
-                  <Input type = "tel" id ="telnum" name = "telnum" placeholder = "Tel. Number" value = {this.state.telnum} onChange = {this.handleInputChange}/>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="telnum" md={2}>
+                  Contact Tel.
+                </Label>
+                <Col md={10}>
+                  <Control.text
+                    model=".telnum"
+                    className="from-control"
+                    type="tel"
+                    id="telnum"
+                    name="telnum"
+                    placeholder="Tel. Number"
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor = "email" md ={2}>Email</Label>
-                <Col md ={10}>
-                  <Input type = "email" id ="email" name = "email" placeholder = "Email" value = {this.state.email} onChange = {this.handleInputChange}/>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="email" md={2}>
+                  Email
+                </Label>
+                <Col md={10}>
+                  <Control.text
+                    model=".email"
+                    className="form-control"
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup row>
+              </Row>
+              <Row className="form-group">
                 {/* Specify no. of columns and offset */}
-                <Col md = {{size: 6, offset : 2}}>
-                  <FormGroup check>
+                <Col md={{ size: 6, offset: 2 }}>
+                  <div classname="form-check">
                     <Label check>
-                      <Input type = "checkbox" name = "agree" checked = {this.state.agree} onChange = {this.handleInputChange}/> {' '}
+                      <Control.checkbox
+                        model=".agree"
+                        className="form-check"
+                        type="checkbox"
+                        name="agree"
+                      />{" "}
                       <strong>May we contact you?</strong>
                     </Label>
-                  </FormGroup>
+                  </div>
                 </Col>
-                <Col md = {{size: 3, offset : 1}}>
-                  <Input type ="select" name = "contactType" value = {this.state.contactType} onChange = {this.handleInputChange}>
+                <Col md={{ size: 3, offset: 1 }}>
+                  <Control.select
+                    model=".contactType"
+                    className="form-control"
+                    type="select"
+                    name="contactType"
+                  >
                     <option>Tel.</option>
                     <option>Email</option>
-                  </Input>
+                  </Control.select>
                 </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor = "message" md ={2}>Your Feedback</Label>
-                <Col md ={10}>
-                  <Input type = "textarea" id ="message" name = "message" rows = "12" value = {this.state.message} onChange = {this.handleInputChange}/>
+              </Row>
+              <Row className="form-group">
+                <Label htmlFor="message" md={2}>
+                  Your Feedback
+                </Label>
+                <Col md={10}>
+                  <Control.textarea
+                    model=".message"
+                    className="form-control"
+                    type="textarea"
+                    id="message"
+                    name="message"
+                    rows="12"
+                  />
                 </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md ={{size:10,offset:2}}>
-                  <Button type ="submit" color = 'primary'>
+              </Row>
+              <Row className="form-group">
+                <Col md={{ size: 10, offset: 2 }}>
+                  <Button type="submit" color="primary">
                     Send Feedback
                   </Button>
                 </Col>
-              </FormGroup>
-
-            </Form>
+              </Row>
+            </LocalForm>
           </div>
         </div>
       </div>
