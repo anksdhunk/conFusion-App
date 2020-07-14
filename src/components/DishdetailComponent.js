@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 import { LocalForm, Control, Errors } from "react-redux-form";
+import { addComment } from './../redux/ActionCreators';
 
 const required = (val) => val && val.length;
 const minlen = (len) => (val) => !val || (val.length >= len);
@@ -42,7 +43,8 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
-    alert("Current State is: " + JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating,values.author, values.comment);
+    
   }
 
   render() {
@@ -120,19 +122,20 @@ class CommentForm extends Component {
   }
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment,dishId }) {
   if (comments != null) {
     const cmt = comments.map((comment) => {
       return (
         <li key={comment.id}>
           <p>{comment.comment}</p>
-          <p>-- {comment.author}</p>
+          <p>-- {comment.author}, 
           &nbsp;
           {new Intl.DateTimeFormat("en-US", {
             year: "numeric",
             month: "long",
             day: "2-digit",
           }).format(new Date(comment.date))}
+          </p>
         </li>
       );
     });
@@ -141,7 +144,7 @@ function RenderComments({ comments }) {
       <div className="col-12 col-md-5 m-1">
         <h4>Comments</h4>
         <ul className="list-unstyled">{cmt}</ul>
-        <CommentForm />
+        <CommentForm dishId = {dishId} addComment = {addComment} />
       </div>
     );
   } else {
@@ -188,7 +191,9 @@ const DishDetail = (props) => {
         </div>
         <div className="row">
           <RenderDish dish={props.dish} />
-          <RenderComments comments={props.comments} />
+          <RenderComments comments={props.comments} 
+          addComment = {props.addComment}
+          dishId = {props.dish.id}/>
         </div>
       </div>
     );
