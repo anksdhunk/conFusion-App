@@ -9,7 +9,7 @@ import DishDetail from "./DishdetailComponent";
 import About from "./AboutComponent";
 import { connect } from "react-redux";
 import { addComment, fetchDishes } from "./../redux/ActionCreators";
-
+import { actions } from "react-redux-form";
 //we need action creator to obtain the javascript action object, which we can dispatch to store by dispatch()
 
 const mapStateToProps = (state) => {
@@ -25,8 +25,9 @@ const mapDispatchToProps = (dispatch) => ({
   //addComment property, this will dispatch the action, to obtain the action, we'll use addComment action creator and properties are passed as params
   addComment: (dishId, ratinng, author, comment) =>
     dispatch(addComment(dishId, ratinng, author, comment)),
-  fetchDishes: () => {dispatch(fetchDishes())}
+  fetchDishes: () => {dispatch(fetchDishes())},
   // map fetch dishes to props, create new property fetchDishes which when invoked result in a call to dispatch fetchDishes function(thunk)
+  resetFeedbackForm: () => {dispatch(actions.reset('feedback'))}
 });
 
 class Main extends Component {
@@ -91,7 +92,7 @@ class Main extends Component {
             component={() => <Menu dishes={this.props.dishes} />}
           />
           <Route path="/menu/:dishId" component={DishWithId} />
-          <Route path="/contactus" component={Contact} />
+    <Route path="/contactus" component={() => <Contact resetFeedbackForm = {this.props.resetFeedbackForm}/>} />
           <Redirect exact from="/" to="home" />
         </Switch>
         <Footer />
